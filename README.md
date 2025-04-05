@@ -4,7 +4,7 @@ LinearCDSfold is a tool for designing a coding sequence by jointly optimizing it
 ## To Compile:
 Run the following command to compile LinearCDSfold.
 
-````
+```
 make
 ```
 
@@ -35,18 +35,18 @@ MGQSKSKEEKGISGTSRAEILPDTTYLGPLNCKSCWQKFDSFSKCHDHYLCRHCLNLLLTSSDRCPLCKYPL
 -cai <CAIFILE>
 ```
 
-CAIFILE is a file of codon usage frequencies, which contains contains the relative adaptiveness values of all the 64 codons arranged in the following order: `AUU, AUA, AUC, CUA, CUC, CUG, CUU, UUA, UUG, GUU, GUA, GUC, GUG, UUU, UUC, AUG, UGU, UGC, GCA, GCC, GCG, GCU, GGU, GGC, GGA, GGG, CCU, CCC, CCA, CCG, ACU, ACC, ACA, ACG, UCU, UCC, UCA, UCG, AGU, AGC, UAU, UAC, UGG, CAA, CAG, AAU, AAC, CAU, CAC, GAA, GAG, GAU, GAC, AAA, AAG, CGU, CGC, CGA, CGG, AGA, AGG, UAA, UAG, UGA`. The following is an example of CAIFILE.
+`CAIFILE` is a file of codon usage frequencies, which contains contains the relative adaptiveness values of all the 64 codons arranged in the following order: `AUU, AUA, AUC, CUA, CUC, CUG, CUU, UUA, UUG, GUU, GUA, GUC, GUG, UUU, UUC, AUG, UGU, UGC, GCA, GCC, GCG, GCU, GGU, GGC, GGA, GGG, CCU, CCC, CCA, CCG, ACU, ACC, ACA, ACG, UCU, UCC, UCA, UCG, AGU, AGC, UAU, UAC, UGG, CAA, CAG, AAU, AAC, CAU, CAC, GAA, GAG, GAU, GAC, AAA, AAG, CGU, CGC, CGA, CGG, AGA, AGG, UAA, UAG, UGA`. The following is an example of CAIFILE.
 
 ```
 1.00, 0.59, 0.57, 0.48, 0.21, 0.38, 0.45, 0.97, 1.00, 1.00, 0.54, 0.54, 0.49, 1.00, 0.69, 1.00, 1.00, 0.59, 0.76, 0.58, 0.29, 1.00, 1.00, 0.40, 0.47, 0.26, 0.74, 0.36, 1.00, 0.29, 1.00, 0.63, 0.86, 0.40, 1.00, 0.62, 0.81, 0.38, 0.62, 0.42, 1.00, 0.79, 1.00, 1.00, 0.45, 1.00, 0.69, 1.00, 0.56, 1.00, 0.43, 1.00, 0.54, 1.00, 0.72, 0.29, 0.13, 0.15, 0.08, 1.00, 0.44, 1.00, 0.49, 0.64
 ```
 
-Note that the default of `CAIFILE` is yeast_relative_adaptiveness.txt.
+Note that the default of `CAIFILE` is  `yeast_relative_adaptiveness.txt`.
 
 ```
 -l <LAMBDA>
 ```
-`LAMBDA` is a scaling parameter of a non-negative real number to balance the contributions of MFE (minimum free energy) of a coding sequence and its CAI (Codon Adaptation Index) value to the joint optimization objective. If `LAMBDA` is 0, then only MFE is considered in the joint optimization objective; otherwise, both MFE and CAI are considered and the larger the value of `LAMBDA`, the greater the contribution of CAI. The default of LAMBDA is 3.
+`LAMBDA` is a scaling parameter of a non-negative real number to balance the contributions of MFE (minimum free energy) of a coding sequence and its CAI (Codon Adaptation Index) value to the joint optimization objective. If `LAMBDA` is 0, then only MFE is considered in the joint optimization objective; otherwise, both MFE and CAI are considered and the larger the value of `LAMBDA`, the greater the contribution of CAI. The default of `LAMBDA` is 3.
 
 ## Example:
 ```
