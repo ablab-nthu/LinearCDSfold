@@ -1,4 +1,4 @@
-
+#pragma once
 #include "energy_parameter.h" // energy_parameter stuff
 
 // pairs: 0:NP 1:CG 2:GC 3:GU 4:UG 5:AU 6:UA 7:NN

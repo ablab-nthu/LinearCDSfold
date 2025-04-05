@@ -1,9 +1,12 @@
+#pragma once
+
 // global variable
-std::vector<std::pair<int, int>> scores;
+#include "functions.h"
 
 
-unsigned long QuickselectPartition(std::vector<std::pair<int, int>>& scores, unsigned long lower, unsigned long upper) {
-    int pivot = scores[upper].first;
+template <typename T>
+unsigned long QuickselectPartition(std::vector<std::pair<T, int>>& scores, unsigned long lower, unsigned long upper) {
+    T pivot = scores[upper].first;
     while (lower < upper) {
         while (scores[lower].first < pivot) ++lower;
         while (scores[upper].first > pivot) --upper;
@@ -14,7 +17,8 @@ unsigned long QuickselectPartition(std::vector<std::pair<int, int>>& scores, uns
     return upper;
 }
 
-int QuickSelect(std::vector<std::pair<int, int>>& scores, unsigned long lower, unsigned long upper, unsigned long k) {
+template <typename T>
+T QuickSelect(std::vector<std::pair<T, int>>& scores, unsigned long lower, unsigned long upper, unsigned long k) {
     if ( lower == upper ) return scores[lower].first;
     unsigned long split = QuickselectPartition(scores, lower, upper);
     unsigned long length = split - lower + 1;
@@ -23,13 +27,16 @@ int QuickSelect(std::vector<std::pair<int, int>>& scores, unsigned long lower, u
     else return QuickSelect(scores, split+1, upper, k - length);
 }
 
-int BeamPrune(std::vector<int>& con_seq, std::string& rna_seq, std::unordered_map<int, State> &bestMap, std::vector<std::unordered_map<int, State>>& bestF, bool isN) {
+template <typename T>
+T BeamPrune(std::vector<int>& con_seq, std::string& rna_seq, std::unordered_map<int, State<T>> &bestMap, std::vector<std::unordered_map<int, State<T>>>& bestF, bool isN) {
     
+    std::vector<std::pair<T, int>> scores;
+
     scores.clear();
     bool have_previous;
-    int newscore, pre_newscore, best_pre_newscore;
+    T newscore, pre_newscore, best_pre_newscore;
 
-    if (bestMap.size() <= beamsize || beamsize == 0) return VALUE_MIN;
+    if (bestMap.size() <= beamsize || beamsize == 0) return VALUE_MIN<T>();
 
     for (auto &item : bestMap) {
 
@@ -37,7 +44,7 @@ int BeamPrune(std::vector<int>& con_seq, std::string& rna_seq, std::unordered_ma
         int i, nuci, nucj;
         std::tie(i, nuci, nucj) = GetIndexTuple(tail_index);
 
-        State cand = item.second;
+        State<T> cand = item.second;
         int i_1 = i - 1;
 
         if(isN){
@@ -46,8 +53,8 @@ int BeamPrune(std::vector<int>& con_seq, std::string& rna_seq, std::unordered_ma
 
             std::vector<int> i_1_nuclist = Base_table.at(rna_seq[i_1]);
             std::vector<int> f_nuclist = Base_table.at(rna_seq[0]);
-            pre_newscore = VALUE_MIN;
-            best_pre_newscore = VALUE_MIN;
+            pre_newscore = VALUE_MIN<T>();
+            best_pre_newscore = VALUE_MIN<T>();
             have_previous=false;
 
             for(auto& nucf : f_nuclist){
@@ -75,7 +82,7 @@ int BeamPrune(std::vector<int>& con_seq, std::string& rna_seq, std::unordered_ma
         
     }
     
-    int threshold = QuickSelect(scores, 0, scores.size() - 1, scores.size() - beamsize);
+    T threshold = QuickSelect(scores, 0, scores.size() - 1, scores.size() - beamsize);
     for (auto &p : scores) {
         if (p.first < threshold) bestMap.erase(p.second);
     }

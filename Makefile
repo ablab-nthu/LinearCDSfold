@@ -7,7 +7,7 @@ objects=LinearCDSfold
 
 linearcdsfold:
 
-		$(CC) $(CFLAGS) src/LinearCDSfold.cpp -o LinearCDSfold 
+		$(CC) $(CFLAGS) src/main.cpp -o LinearCDSfold 
 
 clean:
 	-rm $(objects)

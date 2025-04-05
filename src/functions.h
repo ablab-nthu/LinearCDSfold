@@ -1,4 +1,9 @@
-#define VALUE_MIN std::numeric_limits<int>::lowest()
+#pragma once
+#include "functions.h"
+
+template <typename T>
+constexpr T VALUE_MIN() { return std::numeric_limits<T>::lowest(); }
+
 
 #define SINGLE_MAX_LEN 30
 #define MIN_STACKPAIR_GAP 5
@@ -24,6 +29,9 @@ bool _allowed_pairs[NOTON][NOTON];
 bool xcon_table[3][2][NOTON][NOTON];
 std::unordered_map<char, std::unordered_map<int, int>> CodonSetCAIMap;
 std::unordered_map<std::string, int> CalCAIMap; //for get weighted CAI score from codon string
+
+std::unordered_map<char, std::unordered_map<int, float>> CodonSetCAIMap_derna;
+std::unordered_map<std::string, float> CalCAIMap_derna; //for get weighted CAI score from codon string
 
 // declaration of functions
 int BASE(const std::string& x);
@@ -251,32 +259,34 @@ inline std::tuple<int, int, int> GetIndexTuple(int index_i_j) {
     return std::make_tuple(i, nuci, nucj);
 }
 
+template <typename T>
 struct State {
-    int score;
+    T score;
     int index_1;
     int index_2;
     Manner MANNER;
     int last_pair_pos;
 
-    State() : score(VALUE_MIN), index_1(-1), index_2(-1), MANNER(NONE), last_pair_pos(-1){}
-    State(int score_, const int& index_1_, const int& index_2_, Manner MANNER_)
+    State() : score(VALUE_MIN<T>()), index_1(-1), index_2(-1), MANNER(NONE), last_pair_pos(-1){}
+    State(T  score_, const int& index_1_, const int& index_2_, Manner MANNER_)
         : score(score_), index_1(index_1_), index_2(index_2_), MANNER(MANNER_){}
-    State(int score_, const int& index_1_, const int& index_2_, Manner MANNER_, const int& last_pair_pos_)
+    State(T  score_, const int& index_1_, const int& index_2_, Manner MANNER_, const int& last_pair_pos_)
         : score(score_), index_1(index_1_), index_2(index_2_), MANNER(MANNER_), last_pair_pos(last_pair_pos_){}
 };
 
+template <typename T>
 class AllTables {
 
 public:
 
-    std::vector<std::unordered_map<int, State>> bestN;
-    std::vector<std::unordered_map<int, State>> bestS;
-    std::vector<std::unordered_map<int, State>> bestF;
-    std::vector<std::unordered_map<int, State>> bestC;
-    std::vector<std::unordered_map<int, State>> bestCS;
-    std::vector<std::unordered_map<int, State>> bestM1;
-    std::vector<std::unordered_map<int, State>> bestM2;
-    std::vector<std::unordered_map<int, State>> bestMulti;
+    std::vector<std::unordered_map<int, State<T>>> bestN;
+    std::vector<std::unordered_map<int, State<T>>> bestS;
+    std::vector<std::unordered_map<int, State<T>>> bestF;
+    std::vector<std::unordered_map<int, State<T>>> bestC;
+    std::vector<std::unordered_map<int, State<T>>> bestCS;
+    std::vector<std::unordered_map<int, State<T>>> bestM1;
+    std::vector<std::unordered_map<int, State<T>>> bestM2;
+    std::vector<std::unordered_map<int, State<T>>> bestMulti;
 
     AllTables(std::string rna_seq, int size_) {
         bestN = initi_vec(rna_seq, size_);
@@ -289,8 +299,8 @@ public:
         bestMulti = initi_vec(rna_seq, size_);
     }
 
-    std::vector<std::unordered_map<int, State>> initi_vec(std::string& rna_seq, int size_){
-        std::vector<std::unordered_map<int, State>> seq_tables_(size_);
+    std::vector<std::unordered_map<int, State<T>>> initi_vec(std::string& rna_seq, int size_){
+        std::vector<std::unordered_map<int, State<T>>> seq_tables_(size_);
         return seq_tables_;
     }
 
@@ -596,16 +606,19 @@ inline int getLastExtendedNuc(char amino_ ,std::string codon_){
     return last_nuc;
 }
 
-inline void initialize_CAI_table(std::vector<float> cai_vector_){
+inline void initialize_CAI_table(std::vector<float> cai_vector_, bool is_derna=false){
     std::vector<float> cai_vector;
     log_CAI(cai_vector_, cai_vector);
-
 
     for (int k = 0; k < CodonSet.size(); ++k) {
         char amino_ = CodonSet[k][0][0];
 
-        if (CodonSetCAIMap.find(amino_) == CodonSetCAIMap.end()) {
-            CodonSetCAIMap[amino_] = std::unordered_map<int, int>();
+        if (is_derna && lambda) {
+            if (CodonSetCAIMap_derna.find(amino_) == CodonSetCAIMap_derna.end())
+                CodonSetCAIMap_derna[amino_] = std::unordered_map<int, float>();
+        } else {
+            if (CodonSetCAIMap.find(amino_) == CodonSetCAIMap.end())
+                CodonSetCAIMap[amino_] = std::unordered_map<int, int>();
         }
     }
 
@@ -664,12 +677,19 @@ inline void initialize_CAI_table(std::vector<float> cai_vector_){
                 last_nuc = BASE("C1");
             // {"UCU","S"}, {"UCC","S"}, {"UCA","S"}, {"UCG","S"}, {"AGU","S"}, {"AGC","S"},
         }
-        float weight_ = LDCONST*lambda*cai_vector[i];
-        CodonSetCAIMap[amino_][last_nuc] = int(weight_);
-        if (lambda)
+        
+        if (lambda && !is_derna) {
+            float weight_ = LDCONST * lambda * cai_vector[i];
+            CodonSetCAIMap[amino_][last_nuc] = int(weight_);
             CalCAIMap[codon_] = int(weight_);
-        else
-            CalCAIMap[codon_] = int(LDCONST*cai_vector[i]);
+        } else if (lambda && is_derna) {
+            float weight_ = (1.0 - lambda) * cai_vector[i];
+            CodonSetCAIMap_derna[amino_][last_nuc] = weight_;
+            CalCAIMap_derna[codon_] = weight_;
+        } else {
+            CodonSetCAIMap[amino_][last_nuc] = 0;
+            CalCAIMap[codon_] = int(LDCONST * cai_vector[i]);
+        }
     }    
 }
 
@@ -686,11 +706,32 @@ void check_ami_solution(std::string ami_seq, std::string rna_solution){
     }
 }
 
-int GetCAIScore(const std::string& rna_solution){
+inline int GetCAIScore(const std::string& rna_solution){
     int score = 0;
     for (int i = 0; i <= rna_solution.size() - 3; i += 3){
         std::string codon = rna_solution.substr(i, 3);
         score = score + CalCAIMap[codon];
     }
     return score;
+}
+
+inline float GetCAIScore_derna(const std::string& rna_solution){
+    float score = 0;
+    for (int i = 0; i <= rna_solution.size() - 3; i += 3){
+        std::string codon = rna_solution.substr(i, 3);
+        score = score + CalCAIMap_derna[codon];
+    }
+    return score;
+}
+
+inline void PrintInfo(std::string file, int beamsize, std::string cai_file_path, float lambda, std::string objective){
+    // std out information
+    std::cout << "Amino acid file: " << file << std::endl;
+    std::cout << "Beam size: " << beamsize << std::endl;
+    std::cout << "Codon usage table: " << cai_file_path << std::endl;
+    if (objective == "DN") {
+        std::cout << "DERNA Lambda: " << lambda << std::endl;
+    } else {
+        std::cout << "Lambda: " << lambda << std::endl;
+    }
 }
