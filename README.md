@@ -21,7 +21,7 @@ Use the following command to run LinearCDSfold.
 ```
 
 ### SEQFILE:
-SEQFILE is an amino acid sequence file in FASTA format. The following is an example of SEQFILE.
+`SEQFILE` is an amino acid sequence file in FASTA format. The following is an example of `SEQFILE`.
 
 ```bash
 > 72_1175.fa
@@ -44,7 +44,7 @@ MGQSKSKEEKGISGTSRAEILPDTTYLGPLNCKSCWQKFDSFSKCHDHYLCRHCLNLLLTSSDRCPLCKYPL
 
 1.00, 0.59, 0.57, 0.48, 0.21, 0.38, 0.45, 0.97, 1.00, 1.00, 0.54, 0.54, 0.49, 1.00, 0.69, 1.00, 1.00, 0.59, 0.76, 0.58, 0.29, 1.00, 1.00, 0.40, 0.47, 0.26, 0.74, 0.36, 1.00, 0.29, 1.00, 0.63, 0.86, 0.40, 1.00, 0.62, 0.81, 0.38, 0.62, 0.42, 1.00, 0.79, 1.00, 1.00, 0.45, 1.00, 0.69, 1.00, 0.56, 1.00, 0.43, 1.00, 0.54, 1.00, 0.72, 0.29, 0.13, 0.15, 0.08, 1.00, 0.44, 1.00, 0.49, 0.64
 
-**Note:** The default of CAIFILE is yeast_relative_adaptiveness.txt.
+**Note:** The default of `CAIFILE` is `yeast_relative_adaptiveness.txt`.
 
 ```
 -l <LAMBDA>
