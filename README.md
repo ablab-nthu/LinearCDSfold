@@ -1,4 +1,4 @@
-# LinearCDSfold (version 1.5)
+# LinearCDSfold (version 1.1.0)
 
 LinearCDSfold is a tool for designing coding sequences by jointly optimizing their secondary structure stability and codon usage preferences.
 
