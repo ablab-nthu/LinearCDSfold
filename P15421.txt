@@ -1,0 +1,11 @@
+Amino acid file: example/P15421.fasta
+Codon usage table: codon_usage_freq_table_human.csv
+Objective function: LinearDesign
+Search mode: Exact search
+Lambda: 2.000
+Coding sequence and its secondary structure:
+AUGUAUGGCAAGAUCAUCUUUGUGCUGCUGCUGAGCGGGAUCGUGUCGAUCUCCGCCAGCAGCACCACAGGGGUGGCCAUGCAUACCAGCACCAGCAGUAGCGUGACCAAGAGCUACAUCUCCAGCCAGACCAACGGCAUCACCUUGAUCAACUGGUGGGCCAUGGCCCGCGUGAUCUUCGAGGUGAUGCUGGUGGUGGUGGGGAUGAUCAUCUUGAUCAGCUACUGCAUCCGC
+(((((((((.....((((((((((.((((((((.(((((((((...))))).)))))))))))).)))))))))))))))))))....((....((((((((.(((.(((((....((((((((.((..((((.((((((((((((((.......((((((....)))))).......)))))))))))))).))))))))))))))....))))).)))))))))))....))
+Folding free energy: -132.600 kcal/mol
+CAI: 0.919
+Total runtime: 11.743 s
