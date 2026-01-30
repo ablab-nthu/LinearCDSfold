@@ -74,9 +74,11 @@ If no mode is specified, the default is `exact`.
 
 The `-O` option (uppercase letter O) specifies the objective function for joint optimization of MFE (Minimum Free Energy) and CAI (Codon Adaptation Index). The parameter `objective_function` must be set to either `LD` (default) or `DN`.
 
-* `LD`: LinearDesign objective function `MFE − lambda × l × log(CAI)`, where `l` is the sequence length and `lambda` is a real value ranging from 0 to ∞.
+* `LD`: LinearDesign objective function `MFE − lambda × l × log(CAI)`, where `l` is the amino acid sequence length and `lambda` is a real value ranging from 0 to ∞.
 
 * `DN`: DERNA objective function `lambda × MFE − (1 − lambda) × l × log(CAI)`, where `lambda` is a real value ranging from 0 to 1.
+
+The parameter `lambda` is used to balance the relative contribution of MFE and CAI.
 
 #### 3. Codon Usage File:
 
@@ -105,9 +107,15 @@ If `-c` is not specified, `codon_usage_file` defaults to `codon_usage_freq_table
 
 `lambda` is a non-negative real-valued scaling parameter that balances MFE and CAI in the optimization objective.
 
-* With LinearDesign objective (`LD`), `lambda = 0` considers only MFE, and larger values increase the weight of CAI (default: 0).
+* With LinearDesign objective (`-O LD`): 
+    * Default: `lambda = 0`. 
+    * Weight: MFE = 1 and CAI = `lambda`. 
+    * Effect: Larger `lambda` values increase CAI contribution.
 
-* With DERNA objective (`DN`), `lambda = 1` considers only MFE, and smaller values increase the weight of CAI (default: 1).
+* With DERNA objective (`-O DN`): 
+    * Default: `lambda = 1`. 
+    * Weight: MFE = `lambda` and CAI = 1 - `lambda`. 
+    * Effect: Larger `lambda` values increase MFE contribution.
 
 #### 5. Beam Size:
 
