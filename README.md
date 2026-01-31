@@ -143,7 +143,7 @@ Both `tau1` and `tau2` are termination thresholds for Pareto-optimal search (`-m
 -f <FILE_NAME>
 ```
 
-`-f` specifies an additional CSV file containing only MFE and CAI results for each `lambda`. The file should use the .csv extension. If `-f` is not specified, the default output file is `result.csv`.
+`-f` specifies an additional CSV file containing only MFE and CAI results for each `lambda`. If `-f` is not specified, the default output file is `result.csv`.
 
 ## Examples
 
