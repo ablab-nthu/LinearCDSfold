@@ -58,7 +58,7 @@ The `-o` option (lowercase o) specifies the output file name (`output_file`) con
 -m <search_mode> or --mode <search_mode>
 ```
 
-`search_mode` selects the search strategy in LinearCDSfold (default: `exact`):
+`search_mode` selects the search strategy in LinearCDSfold:
 
 * `exact`: performs an exact search for the optimal CDS.
 * `beam`: uses beam search for fast approximate CDS generation.
